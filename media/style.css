@@ -697,6 +697,215 @@ body {
     filter: drop-shadow(0 0 20px var(--accent1));
 }
 
+/* Player Count Styles */
+.player-count-container {
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.player-count-card {
+    background: linear-gradient(145deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1));
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(2, 219, 2, 0.3);
+    border-radius: var(--roundness);
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 30px rgba(2, 219, 2, 0.2);
+    animation: playerCardPulse 3s ease-in-out infinite;
+}
+
+@keyframes playerCardPulse {
+    0%, 100% { 
+        box-shadow: 0 0 30px rgba(2, 219, 2, 0.2);
+        border-color: rgba(2, 219, 2, 0.3);
+    }
+    50% { 
+        box-shadow: 0 0 40px rgba(2, 219, 2, 0.4);
+        border-color: rgba(2, 219, 2, 0.5);
+    }
+}
+
+.player-count-card:hover {
+    transform: scale(1.05);
+    border-color: var(--accent1);
+    box-shadow: 0 0 50px var(--glow-color);
+}
+
+.player-count-card.clicked {
+    transform: scale(0.95);
+}
+
+.player-count-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, var(--glow-color) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.player-count-card:hover .player-count-glow {
+    opacity: 0.3;
+}
+
+.player-count-icon {
+    position: relative;
+}
+
+.minecraft-head {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(45deg, #8B4513, #A0522D);
+    border-radius: 4px;
+    position: relative;
+    box-shadow: 
+        inset 2px 2px 4px rgba(255, 255, 255, 0.3),
+        inset -2px -2px 4px rgba(0, 0, 0, 0.3),
+        0 0 15px var(--glow-color);
+    animation: headBob 2s ease-in-out infinite;
+}
+
+.minecraft-head::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    width: 6px;
+    height: 6px;
+    background: #000;
+    border-radius: 1px;
+    box-shadow: 18px 0 0 #000, 0 8px 0 #000, 18px 8px 0 #000, 9px 16px 0 #000;
+}
+
+@keyframes headBob {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-3px); }
+}
+
+.player-count-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 120px;
+}
+
+.player-count-number {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent1);
+    text-shadow: 0 0 15px var(--accent1);
+    margin-bottom: 0.25rem;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.player-count-number.updated {
+    animation: countUpdate 0.5s ease-out;
+}
+
+@keyframes countUpdate {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); color: #fff; }
+    100% { transform: scale(1); }
+}
+
+.current-players {
+    color: var(--accent1);
+    font-size: 2rem;
+    animation: numberGlow 2s ease-in-out infinite alternate;
+}
+
+.max-players {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.5rem;
+}
+
+@keyframes numberGlow {
+    from { text-shadow: 0 0 15px var(--accent1); }
+    to { text-shadow: 0 0 25px var(--accent1), 0 0 35px var(--accent1); }
+}
+
+.count-loading {
+    animation: loadingDots 1.5s ease-in-out infinite;
+}
+
+@keyframes loadingDots {
+    0%, 20% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.offline-text, .error-text {
+    color: #ff6b6b;
+    font-size: 1.5rem;
+    animation: errorPulse 2s ease-in-out infinite;
+}
+
+@keyframes errorPulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+}
+
+.player-count-label {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+.server-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #666;
+    animation: statusPulse 2s ease-in-out infinite;
+}
+
+.status-dot.online {
+    background: var(--accent1);
+    box-shadow: 0 0 10px var(--accent1);
+}
+
+.status-dot.offline {
+    background: #ff6b6b;
+    box-shadow: 0 0 10px #ff6b6b;
+}
+
+.status-dot.error {
+    background: #ffa500;
+    box-shadow: 0 0 10px #ffa500;
+}
+
+@keyframes statusPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.status-text {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
 /* Section Spacing */
 #more, #discord, #about, #join {
     padding-top: 5rem;
@@ -1406,6 +1615,36 @@ body {
     
     .main1_ipcopier {
         display: none;
+    }
+    
+    .player-count-card {
+        padding: 1rem 1.5rem;
+        gap: 0.75rem;
+    }
+    
+    .minecraft-head {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .minecraft-head::before {
+        top: 6px;
+        left: 6px;
+        width: 4px;
+        height: 4px;
+        box-shadow: 14px 0 0 #000, 0 6px 0 #000, 14px 6px 0 #000, 7px 12px 0 #000;
+    }
+    
+    .player-count-number {
+        font-size: 1.5rem;
+    }
+    
+    .current-players {
+        font-size: 1.5rem;
+    }
+    
+    .max-players {
+        font-size: 1.2rem;
     }
     
     .main5_admins_img {

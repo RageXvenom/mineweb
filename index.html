@@ -120,6 +120,25 @@
           </button>
         </div>
         
+        <div class="player-count-container">
+          <div class="player-count-card">
+            <div class="player-count-glow"></div>
+            <div class="player-count-icon">
+              <div class="minecraft-head"></div>
+            </div>
+            <div class="player-count-info">
+              <div class="player-count-number" id="playerCount">
+                <span class="count-loading">...</span>
+              </div>
+              <div class="player-count-label">Players Online</div>
+            </div>
+            <div class="server-status" id="serverStatus">
+              <div class="status-dot"></div>
+              <span class="status-text">Checking...</span>
+            </div>
+          </div>
+        </div>
+        
         <a href="#more" class="scroll">
           <img alt="downarrow" class="main1_downarrow" src="media/downarrow.png">
           <div class="arrow-pulse"></div>
@@ -431,6 +450,98 @@
 
         // Create particles periodically
         setInterval(createParticle, 300);
+
+        // Player Count Functionality
+        async function fetchPlayerCount() {
+            try {
+                // Replace 'play.example.com' with your actual server IP
+                const serverIP = 'play.example.com';
+                const serverPort = 25565; // Default Minecraft port
+                
+                // Using a CORS proxy to fetch server status
+                // You can replace this with your own API endpoint
+                const response = await fetch(`https://api.mcsrvstat.us/2/${serverIP}:${serverPort}`);
+                const data = await response.json();
+                
+                const playerCountElement = document.getElementById('playerCount');
+                const serverStatusElement = document.getElementById('serverStatus');
+                
+                if (data.online) {
+                    // Server is online
+                    const playerCount = data.players.online || 0;
+                    const maxPlayers = data.players.max || 0;
+                    
+                    playerCountElement.innerHTML = `
+                        <span class="current-players">${playerCount}</span>
+                        <span class="max-players">/${maxPlayers}</span>
+                    `;
+                    
+                    serverStatusElement.innerHTML = `
+                        <div class="status-dot online"></div>
+                        <span class="status-text">Online</span>
+                    `;
+                    
+                    // Add animation for player count update
+                    playerCountElement.classList.add('updated');
+                    setTimeout(() => {
+                        playerCountElement.classList.remove('updated');
+                    }, 500);
+                    
+                } else {
+                    // Server is offline
+                    playerCountElement.innerHTML = `
+                        <span class="offline-text">Offline</span>
+                    `;
+                    
+                    serverStatusElement.innerHTML = `
+                        <div class="status-dot offline"></div>
+                        <span class="status-text">Offline</span>
+                    `;
+                }
+                
+            } catch (error) {
+                console.error('Error fetching player count:', error);
+                
+                const playerCountElement = document.getElementById('playerCount');
+                const serverStatusElement = document.getElementById('serverStatus');
+                
+                playerCountElement.innerHTML = `
+                    <span class="error-text">Error</span>
+                `;
+                
+                serverStatusElement.innerHTML = `
+                    <div class="status-dot error"></div>
+                    <span class="status-text">Error</span>
+                `;
+            }
+        }
+
+        // Fetch player count on page load
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                fetchPlayerCount();
+                // Update every 30 seconds
+                setInterval(fetchPlayerCount, 30000);
+            }, 2500); // Wait for loading screen to finish
+        });
+
+        // Add click handler for manual refresh
+        document.addEventListener('DOMContentLoaded', function() {
+            const playerCountCard = document.querySelector('.player-count-card');
+            if (playerCountCard) {
+                playerCountCard.addEventListener('click', function() {
+                    const playerCountElement = document.getElementById('playerCount');
+                    playerCountElement.innerHTML = '<span class="count-loading">...</span>';
+                    fetchPlayerCount();
+                    
+                    // Add click animation
+                    this.classList.add('clicked');
+                    setTimeout(() => {
+                        this.classList.remove('clicked');
+                    }, 200);
+                });
+            }
+        });
     </script>
 </body>
 </html>
