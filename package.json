@@ -1,0 +1,18 @@
+{
+  "name": "minecraft-server-website",
+  "version": "1.0.0",
+  "description": "A modern animated website template for Minecraft servers",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx serve . -p 3000",
+    "start": "npx serve . -p 3000",
+    "build": "echo 'Static site - no build needed'",
+    "preview": "npx serve . -p 4173"
+  },
+  "keywords": ["minecraft", "server", "website", "template"],
+  "author": "FQQD",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.1"
+  }
+}
